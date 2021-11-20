@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 )
 
@@ -25,8 +26,14 @@ func (lc *LoginController) LoginByUsername(c *gin.Context){
 		return
 	}
 	db := repository.Database
-	rows, _ := db.Query(fmt.Sprintf("SELECT ID, Username, isadmin FROM users WHERE Username='%s' and password='%s'", loginRequest.Username, loginRequest.Password))
+	if db == nil {
+		log.Fatal("Database is null")
+	}
+	rows,_ := db.Query(fmt.Sprintf("SELECT ID, Username, isadmin FROM users WHERE Username='%s' and password='%s'", loginRequest.Username, loginRequest.Password))
+	//log.Fatal(err)
+
 	if rows != nil  && rows.Next(){
+
 		rows.Scan(&user.ID, &user.Username, &user.Isadmin)
 		sess.Set("ID", user.ID)
 		sess.Set("isadmin", user.Isadmin)
