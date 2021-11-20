@@ -2,6 +2,7 @@ package main
 
 import (
 	"LoginRegister/controller"
+	"LoginRegister/repository"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
@@ -10,6 +11,9 @@ import (
 func main(){
 
 	router:=gin.Default()
+
+	repo := repository.Repository{}
+	repo.InitializeDatabase()
 
 	loginController := controller.LoginController{}
 
